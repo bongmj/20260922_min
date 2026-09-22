@@ -1,0 +1,577 @@
+/* ===================== 기본 리셋 ===================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Pretendard", sans-serif;
+  background: #eef2f0;
+  color: #1f2a24;
+}
+
+/* ===================== 폰 프레임 (세로형 앱 규격) ===================== */
+.phone {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+}
+.phone-frame {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  background: #ffffff;
+  border-radius: 44px;
+  box-shadow: 0 0 0 12px #111417, 0 30px 60px rgba(0,0,0,0.35);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+/* 귀여운 발바닥 패턴 배경 - 카드 사이 여백을 채워 심심함을 줄여줌 */
+.phone-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Ctext x='6' y='40' font-size='26'%3E%F0%9F%90%BE%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 90px 90px;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.statusbar {
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  font-size: 13px;
+  font-weight: 600;
+  background: transparent;
+  z-index: 50;
+  position: relative;
+}
+.onboarding, .app-root { position: relative; z-index: 1; }
+
+/* ===================== 공통 화면 ===================== */
+.screen {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 20px 24px;
+}
+.screen.active { display: flex; flex-direction: column; }
+.screen::-webkit-scrollbar { width: 0; }
+
+.app-root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+}
+.tab-screen { flex: 1; }
+
+/* ===================== 컬러 팔레트 (인아웃 스타일: 민트/그린) ===================== */
+:root {
+  --primary: #22c58b;
+  --primary-dark: #17a674;
+  --primary-light: #d7f5e9;
+  --accent: #ff9166;
+  --carb: #ffb648;
+  --protein: #22c58b;
+  --fat: #ff7d7d;
+  --text-main: #1f2a24;
+  --text-sub: #8a9a92;
+  --bg-card: #ffffff;
+  --bg-soft: #f3f8f5;
+}
+
+h2 { font-size: 20px; font-weight: 800; line-height: 1.35; }
+h3 { font-size: 16px; font-weight: 800; }
+p { line-height: 1.5; }
+
+/* ===================== 온보딩 ===================== */
+.onboarding {
+  padding: 20px 24px 24px;
+  background: linear-gradient(180deg, #f2fbf7 0%, #ffffff 40%);
+}
+.onboard-progress {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+.step-dot {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  background: #e2ece7;
+}
+.step-dot.active { background: var(--primary); }
+
+.ob-step { display: none; flex-direction: column; flex: 1; }
+.ob-step.active { display: flex; }
+
+.ob-mascot {
+  font-size: 64px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 6px 10px rgba(34,197,139,0.25));
+  animation: bounceIn .5s ease;
+}
+@keyframes bounceIn {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.ob-sub {
+  color: var(--text-sub);
+  font-size: 14px;
+  margin: 6px 0 20px;
+}
+.ob-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-sub);
+  margin: 14px 0 6px;
+  display: block;
+}
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid #e4ece8;
+  background: #f8fbfa;
+  font-size: 15px;
+  outline: none;
+  color: var(--text-main);
+}
+input:focus { border-color: var(--primary); background: #fff; }
+
+.seg-group { display: flex; gap: 8px; }
+.seg-btn {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 14px;
+  border: 1.5px solid #e4ece8;
+  background: #f8fbfa;
+  font-weight: 700;
+  color: var(--text-sub);
+  cursor: pointer;
+}
+.seg-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+.choice-list { display: flex; flex-direction: column; gap: 10px; }
+.choice-item {
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid #e4ece8;
+  background: #f8fbfa;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+}
+.choice-item.active {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+.ob-nav {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 20px;
+}
+.btn-primary {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  border-radius: 16px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.btn-primary.small { flex: none; padding: 12px 18px; border-radius: 12px; }
+.btn-ghost {
+  padding: 15px 20px;
+  border: none;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--text-sub);
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-outline {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: 14px;
+  border: 1.5px solid #e4ece8;
+  background: #fff;
+  color: var(--text-main);
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-outline.danger { color: #e6534a; border-color: #f6d6d3; }
+
+.result-card {
+  background: var(--bg-soft);
+  border-radius: 18px;
+  padding: 16px;
+  margin-top: 8px;
+}
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 4px;
+  font-size: 14px;
+  color: var(--text-sub);
+  border-bottom: 1px dashed #dde9e3;
+}
+.result-row:last-child { border-bottom: none; }
+.result-row strong { color: var(--text-main); font-size: 15px; }
+.result-row.highlight strong { color: var(--primary-dark); font-size: 17px; }
+.macro-mini { display: flex; justify-content: space-between; margin-top: 16px; font-size: 12px; color: var(--text-sub); }
+.macro-mini-item { display: flex; align-items: center; gap: 6px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.dot.carb { background: var(--carb); }
+.dot.protein { background: var(--protein); }
+.dot.fat { background: var(--fat); }
+
+/* ===================== 공통 topbar / card ===================== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 16px;
+}
+.greeting { font-size: 17px; font-weight: 800; }
+.greeting-sub { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+.avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.avatar.big { width: 56px; height: 56px; font-size: 26px; }
+
+.card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(31, 42, 36, 0.05);
+}
+.card-title-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.link-btn { background: none; border: none; color: var(--primary-dark); font-size: 12px; font-weight: 700; cursor: pointer; }
+
+.coach-bubble {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--primary-light) 0%, #eafaf1 100%);
+  border: 1.5px solid #bfeeda;
+  border-radius: 18px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.coach-face {
+  font-size: 30px;
+  width: 44px; height: 44px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 3px 8px rgba(23,166,116,0.18);
+}
+.coach-text { font-size: 13px; font-weight: 600; color: var(--primary-dark); line-height: 1.4; }
+.paw-deco {
+  position: absolute;
+  right: -6px; bottom: -10px;
+  font-size: 40px;
+  opacity: 0.15;
+  transform: rotate(-15deg);
+}
+
+/* PT 선생님 탭 상단바 */
+.coach-topbar { align-items: center; gap: 12px; }
+.coach-topbar-avatar {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  border: 2px solid #fff;
+  box-shadow: 0 3px 10px rgba(23,166,116,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+.coach-online { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+
+/* 타이핑 인디케이터 */
+.chat-bubble.typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 13px 16px;
+}
+.chat-bubble.typing span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #a9c9bd;
+  animation: typingBounce 1s infinite ease-in-out;
+}
+.chat-bubble.typing span:nth-child(2) { animation-delay: .15s; }
+.chat-bubble.typing span:nth-child(3) { animation-delay: .3s; }
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: .5; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ===================== 홈: 칼로리 카드 ===================== */
+.kcal-card { display: flex; align-items: center; gap: 16px; }
+.kcal-ring-wrap { position: relative; width: 120px; height: 120px; flex-shrink: 0; }
+.kcal-ring { width: 120px; height: 120px; transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: #eef2f0; stroke-width: 10; }
+.ring-fg {
+  fill: none; stroke: var(--primary); stroke-width: 10; stroke-linecap: round;
+  stroke-dasharray: 326.7; stroke-dashoffset: 326.7;
+  transition: stroke-dashoffset .5s ease;
+}
+.kcal-ring-label {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.kcal-ring-label strong { font-size: 20px; font-weight: 800; }
+.kcal-ring-label span { font-size: 11px; color: var(--text-sub); }
+
+.kcal-side { flex: 1; }
+.kcal-remain { font-size: 13px; color: var(--text-sub); margin-bottom: 10px; }
+.kcal-remain strong { color: var(--text-main); font-size: 15px; }
+.macro-bars { display: flex; flex-direction: column; gap: 8px; }
+.macro-bar-row { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-sub); }
+.macro-bar-row span { width: 46px; flex-shrink: 0; }
+.bar-track { flex: 1; height: 7px; border-radius: 4px; background: #eef2f0; overflow: hidden; }
+.bar-track.big { height: 12px; border-radius: 6px; }
+.bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width .4s ease; }
+.bar-fill.carb { background: var(--carb); }
+.bar-fill.protein { background: var(--protein); }
+.bar-fill.fat { background: var(--fat); }
+.bar-fill.total { background: var(--primary); }
+
+.card-row { display: flex; gap: 8px; margin-bottom: 14px; }
+.mini-card {
+  flex: 1;
+  background: var(--bg-card);
+  border-radius: 18px;
+  padding: 12px 10px;
+  box-shadow: 0 4px 16px rgba(31, 42, 36, 0.05);
+  text-align: center;
+}
+.mini-label { font-size: 10.5px; color: var(--text-sub); margin-bottom: 4px; }
+.mini-value { font-size: 16px; font-weight: 800; }
+.streak-card { background: linear-gradient(135deg, #fff4e8 0%, #fff 100%); }
+
+.mascot-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #fff9ee 0%, #fef3e0 100%);
+  border: 1.5px dashed #ffd699;
+}
+.mascot-sticker {
+  font-size: 22px;
+  flex-shrink: 0;
+  display: flex;
+  gap: 2px;
+  animation: wiggle 2.4s ease-in-out infinite;
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
+}
+.mascot-quote { font-size: 12.5px; font-weight: 700; color: #b06a1a; line-height: 1.4; }
+
+.meal-summary-list { display: flex; flex-direction: column; gap: 8px; }
+.meal-summary-item {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; padding: 8px 0; border-bottom: 1px solid #f1f5f3;
+}
+.meal-summary-item:last-child { border-bottom: none; }
+.meal-summary-item .msi-name { color: var(--text-main); font-weight: 600; }
+.meal-summary-item .msi-kcal { color: var(--text-sub); }
+.empty-hint { font-size: 13px; color: var(--text-sub); text-align: center; padding: 12px 0; }
+
+/* ===================== 식단 기록 탭 ===================== */
+.total-progress-card { padding: 16px 18px; }
+.tp-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-sub); margin-bottom: 10px; }
+.tp-row strong { color: var(--text-main); font-size: 14px; }
+
+.meal-section {
+  background: var(--bg-card);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 16px rgba(31, 42, 36, 0.05);
+}
+.meal-section-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.meal-section-head h4 { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+.meal-kcal-sum { font-size: 12px; color: var(--text-sub); }
+.add-food-btn {
+  border: 1.5px dashed #cfe6db;
+  background: var(--bg-soft);
+  color: var(--primary-dark);
+  border-radius: 12px;
+  width: 100%;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.food-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f3;
+}
+.food-item:last-child { border-bottom: none; }
+.food-item .fi-name { font-size: 13px; font-weight: 700; }
+.food-item .fi-macro { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+.food-item .fi-kcal { font-size: 13px; font-weight: 700; color: var(--primary-dark); }
+.food-item .fi-del {
+  background: none; border: none; color: #cbb; font-size: 15px; cursor: pointer; margin-left: 8px; color: #c4c9c6;
+}
+
+/* ===================== PT 선생님 채팅 ===================== */
+.chat-window {
+  flex: 1;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 6px 2px 14px;
+}
+.chat-msg { display: flex; gap: 8px; max-width: 88%; }
+.chat-msg.coach { align-self: flex-start; }
+.chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+.chat-avatar { font-size: 20px; flex-shrink: 0; }
+.chat-bubble {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.chat-msg.coach .chat-bubble { background: var(--bg-soft); border-top-left-radius: 4px; }
+.chat-msg.user .chat-bubble { background: var(--primary); color: #fff; border-top-right-radius: 4px; }
+
+.quick-replies { display: flex; gap: 8px; flex-wrap: wrap; padding: 6px 0 10px; }
+.quick-btn {
+  border: 1.5px solid #e4ece8;
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  cursor: pointer;
+}
+.chat-input-row { display: flex; gap: 8px; padding: 6px 0 4px; }
+.chat-input-row input { flex: 1; }
+.btn-send {
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 14px;
+  padding: 0 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* ===================== 체중 기록 탭 ===================== */
+.weight-input-row { display: flex; gap: 8px; }
+.weight-input-row input { flex: 1; }
+.goal-rate { font-size: 12px; font-weight: 700; color: var(--primary-dark); }
+.weight-chart { width: 100%; height: 140px; margin-top: 8px; }
+.history-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.history-item {
+  display: flex; justify-content: space-between; font-size: 13px;
+  padding: 8px 0; border-bottom: 1px solid #f1f5f3;
+}
+.history-item:last-child { border-bottom: none; }
+.history-item .hi-date { color: var(--text-sub); }
+.history-item .hi-weight { font-weight: 700; }
+
+/* ===================== 마이 탭 ===================== */
+.profile-card { display: flex; align-items: center; gap: 14px; }
+.profile-name { font-size: 17px; font-weight: 800; }
+.profile-sub { font-size: 12px; color: var(--text-sub); margin-top: 3px; }
+.info-row {
+  display: flex; justify-content: space-between; font-size: 13px;
+  padding: 10px 2px; border-bottom: 1px solid #f1f5f3; color: var(--text-sub);
+}
+.info-row:last-child { border-bottom: none; }
+.info-row strong { color: var(--text-main); }
+
+/* ===================== 하단 탭바 ===================== */
+.tabbar {
+  flex-shrink: 0;
+  display: flex;
+  border-top: 1px solid #eef2f0;
+  background: #fff;
+  padding: 8px 4px calc(env(safe-area-inset-bottom, 10px) + 8px);
+}
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 6px 0;
+  cursor: pointer;
+  color: var(--text-sub);
+}
+.tab-btn span { font-size: 19px; filter: grayscale(1); opacity: .55; }
+.tab-btn em { font-style: normal; font-size: 10px; font-weight: 700; }
+.tab-btn.active { color: var(--primary-dark); }
+.tab-btn.active span { filter: none; opacity: 1; }
+
+/* ===================== 음식 추가 모달 ===================== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(20, 30, 25, 0.45);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 200;
+}
+.modal-overlay.active { display: flex; }
+.modal-sheet {
+  width: 390px;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 24px 24px 0 0;
+  padding: 12px 22px 26px;
+}
+.modal-handle {
+  width: 40px; height: 4px; border-radius: 2px;
+  background: #e2ece7; margin: 4px auto 14px;
+}
+.modal-macro-row { display: flex; gap: 8px; }
+.modal-macro-row > div { flex: 1; }
+.modal-btns { display: flex; gap: 10px; margin-top: 18px; }
+
+@media (max-width: 420px) {
+  .phone { padding: 0; }
+  .phone-frame { width: 100vw; height: 100vh; border-radius: 0; box-shadow: none; }
+  .modal-sheet { width: 100vw; }
+}

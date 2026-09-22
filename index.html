@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마이핏 코치 - 식단관리 앱</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="phone">
+  <div class="phone-frame">
+    <!-- 상단 상태바 -->
+    <div class="statusbar">
+      <span class="time">9:41</span>
+      <span class="icons">📶 📡 🔋</span>
+    </div>
+
+    <!-- ===================== 온보딩 (프로필 입력) ===================== -->
+    <div id="onboarding" class="screen onboarding active">
+      <div class="onboard-progress">
+        <div class="step-dot active" data-step="1"></div>
+        <div class="step-dot" data-step="2"></div>
+        <div class="step-dot" data-step="3"></div>
+        <div class="step-dot" data-step="4"></div>
+        <div class="step-dot" data-step="5"></div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="ob-step active" data-step="1">
+        <div class="ob-mascot">🐶</div>
+        <h2>멍! 안녕하세요!<br>저는 당신의 다이어트 PT 선생님, 콩이에요</h2>
+        <p class="ob-sub">먼저 프로필을 알려주세요</p>
+        <label class="ob-label">이름</label>
+        <input type="text" id="inputName" placeholder="이름을 입력하세요">
+        <label class="ob-label">성별</label>
+        <div class="seg-group" id="genderGroup">
+          <button type="button" class="seg-btn active" data-value="female">여성</button>
+          <button type="button" class="seg-btn" data-value="male">남성</button>
+        </div>
+        <label class="ob-label">나이</label>
+        <input type="number" id="inputAge" placeholder="예: 28">
+      </div>
+
+      <!-- Step 2 -->
+      <div class="ob-step" data-step="2">
+        <div class="ob-mascot">📏</div>
+        <h2>신체 정보를 알려주세요</h2>
+        <p class="ob-sub">정확한 칼로리 계산을 위해 필요해요</p>
+        <label class="ob-label">키 (cm)</label>
+        <input type="number" id="inputHeight" placeholder="예: 165">
+        <label class="ob-label">현재 몸무게 (kg)</label>
+        <input type="number" id="inputWeight" placeholder="예: 60">
+        <label class="ob-label">목표 몸무게 (kg)</label>
+        <input type="number" id="inputTargetWeight" placeholder="예: 55">
+      </div>
+
+      <!-- Step 3 -->
+      <div class="ob-step" data-step="3">
+        <div class="ob-mascot">🏃‍♀️</div>
+        <h2>평소 활동량은 어느 정도인가요?</h2>
+        <p class="ob-sub">활동대사량 계산에 사용돼요</p>
+        <div class="choice-list" id="activityGroup">
+          <button type="button" class="choice-item active" data-value="1.2">거의 안 움직여요 (사무직/재택)</button>
+          <button type="button" class="choice-item" data-value="1.375">가볍게 활동해요 (주 1~3회 운동)</button>
+          <button type="button" class="choice-item" data-value="1.55">활동적이에요 (주 3~5회 운동)</button>
+          <button type="button" class="choice-item" data-value="1.725">매우 활동적이에요 (거의 매일 운동)</button>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="ob-step" data-step="4">
+        <div class="ob-mascot">🎯</div>
+        <h2>목표와 식단 스타일을 골라주세요</h2>
+        <label class="ob-label">다이어트 목표</label>
+        <div class="choice-list" id="goalGroup">
+          <button type="button" class="choice-item active" data-value="lose">체중 감량</button>
+          <button type="button" class="choice-item" data-value="maintain">체중 유지</button>
+          <button type="button" class="choice-item" data-value="gain">근육 증량</button>
+        </div>
+        <label class="ob-label">선호 식단 스타일</label>
+        <div class="choice-list" id="dietGroup">
+          <button type="button" class="choice-item active" data-value="normal">일반식</button>
+          <button type="button" class="choice-item" data-value="lowcarb">저탄고지</button>
+          <button type="button" class="choice-item" data-value="keto">키토</button>
+          <button type="button" class="choice-item" data-value="vegan">비건</button>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="ob-step" data-step="5">
+        <div class="ob-mascot">✨</div>
+        <h2 id="resultName">분석이 끝났어요!</h2>
+        <p class="ob-sub">선생님이 맞춤 플랜을 준비했어요</p>
+        <div class="result-card">
+          <div class="result-row"><span>기초대사량 (BMR)</span><strong id="resultBmr">-</strong></div>
+          <div class="result-row"><span>활동대사량 (TDEE)</span><strong id="resultTdee">-</strong></div>
+          <div class="result-row highlight"><span>일일 권장 섭취 칼로리</span><strong id="resultTarget">-</strong></div>
+        </div>
+        <div class="macro-mini">
+          <div class="macro-mini-item"><span class="dot carb"></span>탄수화물 <b id="resultCarb">-</b></div>
+          <div class="macro-mini-item"><span class="dot protein"></span>단백질 <b id="resultProtein">-</b></div>
+          <div class="macro-mini-item"><span class="dot fat"></span>지방 <b id="resultFat">-</b></div>
+        </div>
+      </div>
+
+      <div class="ob-nav">
+        <button id="obPrev" class="btn-ghost" style="visibility:hidden">이전</button>
+        <button id="obNext" class="btn-primary">다음</button>
+      </div>
+    </div>
+
+    <!-- ===================== 메인 앱 ===================== -->
+    <div id="app" class="app-root">
+
+      <!-- 홈 -->
+      <div id="tab-home" class="screen tab-screen active">
+        <div class="topbar">
+          <div>
+            <p class="greeting">안녕하세요, <span id="homeUserName">회원</span>님 👋</p>
+            <p class="greeting-sub" id="homeDateStr">오늘도 화이팅이에요!</p>
+          </div>
+          <div class="avatar">🙋</div>
+        </div>
+
+        <div class="coach-bubble">
+          <div class="coach-face">🐶</div>
+          <div class="coach-text" id="coachHomeMsg">오늘 식단을 기록하고 코치의 피드백을 받아보세요!</div>
+          <div class="paw-deco">🐾</div>
+        </div>
+
+        <div class="card kcal-card">
+          <div class="kcal-ring-wrap">
+            <svg viewBox="0 0 120 120" class="kcal-ring">
+              <circle cx="60" cy="60" r="52" class="ring-bg"></circle>
+              <circle cx="60" cy="60" r="52" class="ring-fg" id="ringFg"></circle>
+            </svg>
+            <div class="kcal-ring-label">
+              <strong id="kcalEatenLabel">0</strong>
+              <span>/ <span id="kcalTargetLabel">0</span> kcal</span>
+            </div>
+          </div>
+          <div class="kcal-side">
+            <p class="kcal-remain">남은 칼로리 <strong id="kcalRemain">0</strong> kcal</p>
+            <div class="macro-bars">
+              <div class="macro-bar-row">
+                <span>탄수화물</span>
+                <div class="bar-track"><div class="bar-fill carb" id="barCarb"></div></div>
+              </div>
+              <div class="macro-bar-row">
+                <span>단백질</span>
+                <div class="bar-track"><div class="bar-fill protein" id="barProtein"></div></div>
+              </div>
+              <div class="macro-bar-row">
+                <span>지방</span>
+                <div class="bar-track"><div class="bar-fill fat" id="barFat"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-row">
+          <div class="mini-card">
+            <p class="mini-label">현재 체중</p>
+            <p class="mini-value" id="homeCurWeight">- kg</p>
+          </div>
+          <div class="mini-card">
+            <p class="mini-label">목표까지</p>
+            <p class="mini-value" id="homeToGoal">- kg</p>
+          </div>
+          <div class="mini-card streak-card">
+            <p class="mini-label">연속 기록</p>
+            <p class="mini-value"><span id="homeStreak">0</span>일 🔥</p>
+          </div>
+        </div>
+
+        <div class="card mascot-card">
+          <div class="mascot-sticker">🐾🐶🐾</div>
+          <p class="mascot-quote" id="mascotQuote">오늘도 저와 함께 건강한 하루 보내요!</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title-row">
+            <h3>오늘의 식단</h3>
+            <button class="link-btn" data-goto="tab-diet">기록하기 ›</button>
+          </div>
+          <div id="homeMealSummary" class="meal-summary-list"></div>
+        </div>
+      </div>
+
+      <!-- 식단 기록 -->
+      <div id="tab-diet" class="screen tab-screen">
+        <div class="topbar">
+          <h2>식단 기록</h2>
+        </div>
+        <div class="card total-progress-card">
+          <div class="tp-row">
+            <span>오늘 섭취 칼로리</span>
+            <strong><span id="dietEaten">0</span> / <span id="dietTarget">0</span> kcal</strong>
+          </div>
+          <div class="bar-track big"><div class="bar-fill total" id="dietTotalBar"></div></div>
+        </div>
+
+        <div id="mealSections"></div>
+      </div>
+
+      <!-- PT 선생님 -->
+      <div id="tab-coach" class="screen tab-screen">
+        <div class="topbar coach-topbar">
+          <div class="coach-topbar-avatar">🐶</div>
+          <div>
+            <h2>콩이 PT 선생님</h2>
+            <p class="coach-online">🟢 온라인 · 항상 응답해요</p>
+          </div>
+        </div>
+        <div class="chat-window" id="chatWindow"></div>
+        <div class="quick-replies" id="quickReplies">
+          <button class="quick-btn" data-msg="오늘 식단 어때요?">오늘 식단 어때요?</button>
+          <button class="quick-btn" data-msg="운동 추천해줘요">운동 추천해줘요</button>
+          <button class="quick-btn" data-msg="동기부여가 필요해요">동기부여가 필요해요</button>
+          <button class="quick-btn" data-msg="야식이 먹고싶어요">야식이 먹고싶어요</button>
+          <button class="quick-btn" data-msg="체중 얼마나 남았어요?">체중 얼마나 남았어요?</button>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="선생님께 메시지를 보내보세요">
+          <button id="chatSend" class="btn-send">전송</button>
+        </div>
+      </div>
+
+      <!-- 체중 기록 -->
+      <div id="tab-weight" class="screen tab-screen">
+        <div class="topbar">
+          <h2>체중 기록</h2>
+        </div>
+        <div class="card">
+          <div class="weight-input-row">
+            <input type="number" id="weightInput" placeholder="오늘 몸무게 (kg)">
+            <button id="weightAddBtn" class="btn-primary small">기록</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title-row">
+            <h3>변화 그래프</h3>
+            <span class="goal-rate" id="goalRateLabel">달성률 0%</span>
+          </div>
+          <svg viewBox="0 0 300 140" class="weight-chart" id="weightChart"></svg>
+        </div>
+        <div class="card">
+          <h3>기록 히스토리</h3>
+          <div id="weightHistoryList" class="history-list"></div>
+        </div>
+      </div>
+
+      <!-- 마이 -->
+      <div id="tab-my" class="screen tab-screen">
+        <div class="topbar">
+          <h2>마이 프로필</h2>
+        </div>
+        <div class="card profile-card">
+          <div class="avatar big">🙋</div>
+          <div>
+            <p class="profile-name" id="myName">회원</p>
+            <p class="profile-sub" id="myGoalText">목표: -</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="info-row"><span>성별</span><strong id="myGender">-</strong></div>
+          <div class="info-row"><span>나이</span><strong id="myAge">-</strong></div>
+          <div class="info-row"><span>키</span><strong id="myHeight">-</strong></div>
+          <div class="info-row"><span>현재 몸무게</span><strong id="myWeight">-</strong></div>
+          <div class="info-row"><span>목표 몸무게</span><strong id="myTargetWeight">-</strong></div>
+          <div class="info-row"><span>활동량</span><strong id="myActivity">-</strong></div>
+          <div class="info-row"><span>식단 스타일</span><strong id="myDietStyle">-</strong></div>
+          <div class="info-row"><span>일일 권장 칼로리</span><strong id="myTargetKcal">-</strong></div>
+        </div>
+        <button id="editProfileBtn" class="btn-outline">프로필 다시 설정하기</button>
+        <button id="resetAllBtn" class="btn-outline danger">모든 기록 초기화</button>
+      </div>
+
+      <!-- 하단 탭바 -->
+      <nav class="tabbar">
+        <button class="tab-btn active" data-tab="tab-home"><span>🏠</span><em>홈</em></button>
+        <button class="tab-btn" data-tab="tab-diet"><span>🍎</span><em>식단</em></button>
+        <button class="tab-btn" data-tab="tab-coach"><span>🐶</span><em>PT선생님</em></button>
+        <button class="tab-btn" data-tab="tab-weight"><span>📈</span><em>기록</em></button>
+        <button class="tab-btn" data-tab="tab-my"><span>👤</span><em>마이</em></button>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- 음식 추가 모달 -->
+<div id="foodModal" class="modal-overlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h3 id="modalMealTitle">음식 추가</h3>
+    <label class="ob-label">음식 이름</label>
+    <input type="text" id="foodName" placeholder="예: 닭가슴살 샐러드">
+    <label class="ob-label">칼로리 (kcal)</label>
+    <input type="number" id="foodKcal" placeholder="예: 350">
+    <div class="modal-macro-row">
+      <div>
+        <label class="ob-label">탄수화물(g)</label>
+        <input type="number" id="foodCarb" placeholder="0">
+      </div>
+      <div>
+        <label class="ob-label">단백질(g)</label>
+        <input type="number" id="foodProtein" placeholder="0">
+      </div>
+      <div>
+        <label class="ob-label">지방(g)</label>
+        <input type="number" id="foodFat" placeholder="0">
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button id="foodCancelBtn" class="btn-ghost">취소</button>
+      <button id="foodSaveBtn" class="btn-primary">추가하기</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
